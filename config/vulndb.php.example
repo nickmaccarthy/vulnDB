@@ -12,5 +12,5 @@ return array (
 
         // Scan types to pull into vulnDB
         // Typically you want canceled and finished
-        'scan_types_to_get' => array('Finished', 'Canceled');
+        'scan_types_to_get' => array('Finished', 'Canceled'),
     );
