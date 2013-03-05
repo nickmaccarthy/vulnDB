@@ -89,7 +89,7 @@ foreach ( $accounts as $account )
             $scantitle = (string) $scan_to_get['SCAN_TITLE'];
             $scandate = (string) $scan_to_get['SCAN_DATE'];
 
-            $scantypestoget = array("Canceled");
+            $scantypestoget = $config['scan_types_to_get'];
 
             if ( in_array($scanstatus, $scantypestoget))
             {

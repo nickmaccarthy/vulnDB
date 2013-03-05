@@ -9,4 +9,8 @@ return array (
         // For time examples, please look at the strtotime function
         // http://php.net/strtotime
         'scan_timeframe' => '-2 month',
+
+        // Scan types to pull into vulnDB
+        // Typically you want canceled and finished
+        'scan_types_to_get' => array('Finished', 'Canceled');
     );
