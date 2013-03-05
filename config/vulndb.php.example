@@ -1,0 +1,12 @@
+<?php
+
+return array (
+    
+        // Name of the account where you pull the Knowledgebase from
+        'kb_account' => '',
+
+        // Timeframe for vulnDB to 'sync' scans back 
+        // For time examples, please look at the strtotime function
+        // http://php.net/strtotime
+        'scan_timeframe' => '-2 month',
+    );

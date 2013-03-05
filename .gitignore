@@ -1,0 +1,18 @@
+
+## Ignore our sensitive configs
+config/database.php
+config/crypt.php
+config/vulndb.php
+
+## Ignore all logs in the log directory
+log/*.log
+
+## Ignore the scan reports, but keep the report directory and README.md
+reports/*
+!reports/README.md
+
+## Ignore all .swp
+*.swp
+
+## Ignore tests
+tests/*

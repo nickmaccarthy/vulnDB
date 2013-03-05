@@ -1,0 +1,36 @@
+<?php
+
+
+return array(
+
+        'vulndb'    => array
+        (
+            'type' => 'PDO',
+            'connection' => array(
+                'db_driver' => 'mysql',
+                'username' => '',
+                'password' => '',
+                'host' => 'localhost',
+                'persistent' => FALSE,
+                'port' => FALSE,
+                'socket' => FALSE,
+                'database' => 'vulnDB'
+            ),
+            'table_prefix' => ''
+        ),
+        'vulndb_users'  => array
+        (
+            'type' => 'PDO',
+            'connection' => array(
+                'db_driver' => 'mysql',
+                'username' => '',
+                'password' => '',
+                'host' => 'localhost',
+                'persistent' => FALSE,
+                'port' => FALSE,
+                'socket' => FALSE,
+                'database' => 'vulndb_users'
+            ),
+            'table_prefix' => ''
+        ),
+);
