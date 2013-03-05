@@ -20,6 +20,8 @@
 *
 **/
 
+Logger::msg("info", array('message' => "KB updater starting"));
+
 $vdb_config = Config::load('vulndb');
 
 // Name of the account we will use to pull back in the KB
@@ -38,7 +40,11 @@ $url1 = $account_info['url1'];
 
 $api1 = new QualysAPI_v1;
 
+Logger::msg('info', array('message' => "Qualys KB download beginning", 'api_call' => 'get_qualys_kb', 'api_version' => '1'));
+
 $KB_XML = $api1->get_qualys_kb($url1, $username, $password);
+
+Logger::msg('info', array('message' => "Qualys KB download complete", 'api_call' => 'get_qualys_kb', 'api_version' => '1'));
 
 // check the XML
 if ( ! $vulndb->is_xml($KB_XML) )
@@ -52,7 +58,7 @@ if ( ! $vulndb->is_xml($KB_XML) )
 $truncate = DB::query(Database::DELETE, "TRUNCATE " . MAIN_QUALYS_KB_TABLE)
                 ->execute();
 
-Logger::msg("info", array('message' => "KB truncated"));
+Logger::msg("info", array('message' => "Qualsy KB table, ". MAIN_QUALYS_KB_TABLE . " truncated"));
 
 Logger::msg("info", array('message' => "KB insert beginning"));
 
