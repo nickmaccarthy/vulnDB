@@ -26,8 +26,6 @@ class QualysAPI_v1{
         public function get_qualys_kb($base_url, $username, $password)
         {
             $url = $base_url . "knowledgebase_download.php?show_cvss_submetrics=1&show_pci_flag=1";
-    
-            $post_vars = array ('show_cvss_submetrics' => 1, 'show_pci_flag' => 1);
 
             $output = $this->get_url($url, $username, $password);
 
@@ -174,8 +172,8 @@ class QualysAPI_v1{
                 curl_setopt($ch, CURLOPT_HEADER, FALSE);
 
                 // Timeouts
-                curl_setopt($ch, CURLOPT_TIMEOUT, 60);
-                curl_setopt($ch, CURLOPT_LOW_SPEED_TIME, 30);
+                curl_setopt($ch, CURLOPT_TIMEOUT, 500);
+                curl_setopt($ch, CURLOPT_LOW_SPEED_TIME, 120);
                 curl_setopt($ch, CURLOPT_LOW_SPEED_LIMIT, 10);
 
 
@@ -204,9 +202,10 @@ class QualysAPI_v1{
 
                 curl_close($ch);
 
-                //return $curl_result;
+                return $curl_result;
 
 
+                /*
                 $raw_headers = substr($curl_result, 0, strpos($curl_result, "\r\n\r\n"));
                 $body =  substr($curl_result, strpos($curl_result, "\r\n\r\n")) ;
 
@@ -224,6 +223,7 @@ class QualysAPI_v1{
 
 
                 return $result;
+                */
 
           }
 

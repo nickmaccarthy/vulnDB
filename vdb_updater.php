@@ -1,4 +1,4 @@
-<?php require '../init.php';  $vdb_config = Config::load('vulndb');
+<?php require 'init.php';  $vdb_config = Config::load('vulndb');
 /**
 *
 *
