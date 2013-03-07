@@ -17,7 +17,7 @@ class Logger {
         $parent_script = $_SERVER['SCRIPT_NAME'];
         $parent_class = get_parent_class();
 
-        $msg = "[ ". date(Logger::$date_format) . " ] - log_level=\"$type\" script=\"$parent_script\" ". implode(" ", $formatted_msg) . "\n";
+        $msg = "[ ". date(Logger::$date_format) . " ] - log_type=\"$type\" script=\"$parent_script\" ". implode(" ", $formatted_msg) . "\n";
 
         echo $msg;
 
