@@ -141,7 +141,6 @@ class Model_vulndb_insert extends Model {
             {
                 $insert->execute();
                 $insert->reset_values();
-                echo "Inserted 500 rows -- total rows inserted: $c\n";
             }
         }
 
@@ -150,4 +149,59 @@ class Model_vulndb_insert extends Model {
         return $c;
     }
 
+    public function report_templates($report_template_xml, $account_name)
+    {
+
+        $parsed = parse::report_template($report_template_xml, $account_name);
+
+        $insert = $this->insert(REPORT_TEMPLATE_TABLE, $parsed);
+
+        return $insert;
+    }
+
+    public function asset_data_report($adr_xml, array $opts)
+    {
+
+        $adr = parse::asset_data_report($adr_xml, $opts);
+
+
+        // Lets put it all in the DB
+        $insert_hosts = $this->insert(ADR_HOSTS_TABLE, $adr['hosts']);
+
+        $insert_vulns = $this->insert(ADR_VULNS_TABLE, $adr['vulns']);
+
+        $insert_ags = $this->insert(ADR_AG_TABLE, $adr['ags']);
+
+        return $insert_hosts + $insert_vulns + $insert_ags;
+
+    }
+
+
+    public function insert($table, $data)
+    {
+
+        $fields = array_keys($data[0]);
+
+        $insert = DB::insert($table, $fields);
+
+        $c = 0;
+        foreach ( $data as $d )
+        {
+
+            $c++;
+            $insert->values($d);
+
+            if ( $c % 500 === 0 )
+            {
+                $insert->execute();
+                $insert->reset_values();
+            }
+        }
+
+        $insert->execute();
+
+        Logger::msg("info", array("message" => "DB insert complete", "rows_inserted" => $c, "table" => $table, "class_name" => __CLASS__, "method" => __METHOD__));
+
+        return $c;
+    }
 }

@@ -14,7 +14,10 @@ class Logger {
             $formatted_msg[] = $key."=".'"'.$val.'"';
         }
 
-        $msg = date(Logger::$date_format) . ' type="'.$type.'" '. implode(" ", $formatted_msg) . "\n";
+        $parent_script = $_SERVER['SCRIPT_NAME'];
+        $parent_class = get_parent_class();
+
+        $msg = "[ ". date(Logger::$date_format) . " ] - log_level=\"$type\" script=\"$parent_script\" ". implode(" ", $formatted_msg) . "\n";
 
         echo $msg;
 

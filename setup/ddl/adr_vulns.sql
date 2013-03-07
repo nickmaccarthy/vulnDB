@@ -1,4 +1,4 @@
-CREATE TABLE `adr_scan_vulns` (
+CREATE TABLE `adr_vulns` (
   `IP` int(11) unsigned default NULL,
   `QID` int(2) default NULL,
   `PORT` int(2) default NULL,
@@ -15,9 +15,11 @@ CREATE TABLE `adr_scan_vulns` (
   `TICKET_STATE` varchar(10) default NULL,
   `REPORT_TEMPLATE_ID` int(4) NOT NULL,
   `ACCOUNT` varchar(20) default NULL,
+  `DATE_ENTERED` DATETIME,
   KEY `IP` (`IP`),
   KEY `QID` (`QID`),
   KEY `ACCOUNT` (`ACCOUNT`),
   KEY `TYPE` (`TYPE`),
-  KEY `REPORT_TEMPLATE_ID` (`REPORT_TEMPLATE_ID`)
+  KEY `REPORT_TEMPLATE_ID` (`REPORT_TEMPLATE_ID`),
+  KEY `DATE_ENTERED` (`DATE_ENTERED`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1

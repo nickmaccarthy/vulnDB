@@ -315,4 +315,108 @@ class Parse {
         return $ag;
     }
 
+    public static function report_template($xml, $account)
+    {
+
+        try {
+            $xml = new SimpleXMLElement($xml);
+        } catch ( Exception $e ){
+            throw new vulnDB_Exception("Error loading XML: :error", array(":error", $e->getMessage()));
+        }
+
+        foreach($xml->REPORT_TEMPLATE as $rt)
+        {
+            $reports[] = array(
+                            "ID" => (int) $rt->ID,
+                            "TYPE" => (string) $rt->TYPE,
+                            "TEMPLATE_TYPE" => (string) $rt->TEMPLATE_TYPE,
+                            "TITLE" => (string) $rt->TITLE,
+                            "USER_LOGIN" => (string) $rt->USER->LOGIN,
+                            "USER_FIRSTNAME" => (string) $rt->USER->FIRSTNAME,
+                            "USER_LASTNAME" => (string) $rt->USER->LASTNAME,
+                            "LAST_UPDATE" => (string) $rt->LAST_UPDATE,
+                            "GLOBAL" => (int) $rt->GLOBAL,
+                            "ACCOUNT" => (string) $account,
+                        );
+
+        }
+
+        return $reports;
+
+    }
+
+    public static function asset_data_report($adr_xml, $opts)
+    {
+        $vulndb = Model::factory('vulndb_main');
+
+        $account = $opts['account_name'];
+        $template_id = $opts['report_template_id'];
+        $now = date('c');
+
+        $xml = new SimpleXMLElement($adr_xml);
+
+        $host_info = array();
+        $vulns = array();
+        $ag_info = array();
+
+
+        foreach ($xml->HOST_LIST->HOST as $eH)
+        {
+
+            // Get our Hosts
+            $host_info[] = array( 
+                                "IP" => (string) $vulndb->makelongip($eH->IP),
+                                "TRACKING_METHOD" => (string)$eH->TRACKING_METHOD,
+                                "DNS" => (string) $eH->DNS,
+                                "NETBIOS" => (string) $eH->NETBIOS,
+                                "OS" => (string)$eH->OPERATING_SYSTEM,
+                                "REPORT_TEMPLATE_ID" => $template_id, 
+                                "ACCOUNT" => $account,
+                                "DATE_ENTERED" => $now,
+                                );
+
+            foreach ($eH->ASSET_GROUPS AS $ag)
+            {
+                // Get our Asset Groups
+                $ag_info[] = array(
+                                "IP" => (string) $vulndb->makelongip($eH->IP),
+                                "ASSET_GROUP_TITLE" => (string) $ag->ASSET_GROUP_TITLE,
+                                "REPORT_TEMPLATE_ID" => $template_id,
+                                "ACCOUNT" => $account,
+                                "DATE_ENTERED" => $now,
+                            );
+            }
+
+            foreach ($eH->VULN_INFO_LIST->VULN_INFO as $eV)
+            {
+
+                    // Get our vulns
+                    $vulns[] = array(
+                                "IP" => (string) $vulndb->makelongip($eH->IP),
+                                "QID" => (string) $eV->QID,
+                                "PORT" => (string) $eV->PORT,
+                                "PROTOCOL" => (string) $eV->PROTOCOL,
+                                "TYPE" => (string) $eV->TYPE,
+                                "SSL_ENABLED" => (string) $eV->SSL,
+                                "RESULT" => (string) $eV->RESULT,
+                                "FIRST_FOUND" => (string) $eV->FIRST_FOUND,
+                                "LAST_FOUND" => (string) $eV->LAST_FOUND,
+                                "TIMES_FOUND" => (string) $eV->TIMES_FOUND,
+                                "VULN_STATUS" => (string) $eV->VULN_STATUS,
+                                "CVSS_FINAL" => (string) $eV->CVSS_FINAL,
+                                "TICKET_NUMBER" => (string) $eV->TICKET_NUMBER,
+                                "TICKET_STATE" => (string) $eV->TICKET_STATE,
+                                "REPORT_TEMPLATE_ID" => $template_id,
+                                "ACCOUNT" => $account,
+                                "DATE_ENTERED" => $now,
+                                );
+            }
+                        
+        }
+
+
+        return array( "hosts" => $host_info, "vulns" => $vulns, "ags" => $ag_info);
+
+    }
+
 }

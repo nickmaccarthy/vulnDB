@@ -86,9 +86,9 @@ define("MAIN_AG_TABLE", $db_tables['vulndb']['asset_groups']); // Asset Groups f
 define("MAIN_QUALYS_KB_TABLE", $db_tables['vulndb']['qualys_kb']); // Qualys KB table
 
 // Asset data report/report template tables
-define("ADR_SCAN_HOSTS_TABLE", $db_tables['vulndb']['adr_scan_hosts']);
-define("ADR_SCAN_VULNS_TABLE", $db_tables['vulndb']['adr_scan_vulns']);
-define("ADR_SCAN_AG_TABLE", $db_tables['vulndb']['adr_scan_asset_groups']);
+define("ADR_SCAN_HOSTS_TABLE", $db_tables['vulndb']['adr_hosts']);
+define("ADR_SCAN_VULNS_TABLE", $db_tables['vulndb']['adr_vulns']);
+define("ADR_SCAN_AG_TABLE", $db_tables['vulndb']['adr_asset_groups']);
 define("REPORT_TEMPLATE_TABLE", $db_tables['vulndb']['report_templates']);
 
 // Logins

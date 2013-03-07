@@ -115,7 +115,7 @@ foreach ( $accounts as $account )
 
                 if ( $download_scan )
                 {    
-                    Logger::msg('info', array('account' => $account_name, 'message' => "scan successfully download", 'scan_id' => $scanid, 'scan_title' => $scantitle, 'scan_date' => $scandate));
+                    Logger::msg('info', array('account' => $account_name, 'message' => "scan successfully downloaded", 'scan_id' => $scanid, 'scan_title' => $scantitle, 'scan_date' => $scandate));
                 }
                 else
                 {
