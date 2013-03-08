@@ -20,27 +20,7 @@
 *
 **/
 
-
-/*---------------------------------------------------------------------------------------
-*
-*           Additional Configuration
-*
-*---------------------------------------------------------------------------------------*/
-
-/*
-*  This is the timeframe we will 'sync' scans from for our inital run.  By default its 3 months, meaning I will pull back 3 months worth of scans, assuming you have enough API calls.  
-*  Each time this script runs after, it will verify which scans it already has in the database, and pull only those from Qualys which it DOES NOT have.  
-*  Assuming you do quite a bit of scanning, the inital sync here, can be quite big.  After we have our inital scans in, vulnDB will only update incrementally.
-*  If you need to sync back more than 3 months worth of scans, change the timeframe in the strtotime() function.  For more info on what it accepts, check out http://us2.php.net/strtotime
-*  Do keep in mind however, by default you only 300 API calls per day (24 hour period), per account. Each scan download will take up 1 API call.  If want to sync back 6 months, and you have 500 scans in that timeframe, then leave the initial timeframe at 3 months for the first run, and the next day (when the API call limit has reset), change the timeframe to 6 months, and vulnDB will pull the others.  
-*/  
 $timeframe = date('Y-m-d', strtotime($vdb_config['scan_timeframe']));
-
-/*---------------------------------------------------------------------------------------
-*
-*           END Additional Configuration
-*
-*---------------------------------------------------------------------------------------*/
 
 $insert_model = Model::factory('vulndb_insert');
 $vulndb = Model::factory('vulndb_main');
