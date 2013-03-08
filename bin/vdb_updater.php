@@ -1,4 +1,4 @@
-<?php require 'init.php';  $vdb_config = Config::load('vulndb');
+<?php 
 /**
 *
 *
@@ -19,6 +19,15 @@
 *       2013
 *
 **/
+if ( ! is_file( $init_file = realpath(dirname(__FILE__))."/../init.php"))
+{
+    echo "Could not find init.php, this file is requied for vulnDB to operate\n";
+    exit(1);
+}
+
+require $init_file;
+
+$vdb_config = Config::load('vulndb');
 
 $timeframe = date('Y-m-d', strtotime($vdb_config['scan_timeframe']));
 

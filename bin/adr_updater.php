@@ -1,4 +1,31 @@
-<?php   require 'init.php';
+<?php 
+/**
+*
+*
+*               __         ______    _______  
+* .--.--..--.--.|  |.-----.|   _  \  |   _   \ 
+* |  |  ||  |  ||  ||     ||.  |   \ |.  1   / 
+*  \___/ |_____||__||__|__||.  |    \|.  _   \ 
+*                          |:  1    /|:  1    \
+*                         |::.. . / |::.. .  /
+*                          `------'  `-------' 
+*
+*   Written by Nick MacCarthy
+*       nickmaccarthy@gmail.com
+*       http://www.nickmaccarthy.com
+*   
+*       Released under the MIT license
+*
+*       2013
+*
+**/
+if ( ! is_file( $init_file = realpath(dirname(__FILE__))."/../init.php"))
+{
+    echo "Could not find init.php, this file is requied for vulnDB to operate\n";
+    exit(1);
+}
+
+require $init_file;
 
 
 $insert_model = Model::factory('vulndb_insert');
