@@ -128,7 +128,7 @@ class QualysAPI_v2{
             curl_setopt($ch, CURLOPT_COOKIEFILE, $this->cookie_file);
 
             // Timeouts
-            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 60);
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 500);
             curl_setopt($ch, CURLOPT_LOW_SPEED_LIMIT, 100);
             curl_setopt($ch, CURLOPT_LOW_SPEED_TIME, 60);
 
