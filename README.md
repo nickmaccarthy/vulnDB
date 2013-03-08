@@ -33,7 +33,7 @@ What is this thing?
 
 vulnDB is a project orignially developed to pull in vulnerability data from various vendors and sources for analysis, trending, reporting and other metrics as well as correlation with security events.  
 
-This module was originially developt for for syncing "raw", or what Qualys refers to as 'manual' scan data/results for one or more Qualys accounts into the vulnDB system.  However, it grew beyond that and can store "Automatic Scan Reports" from Qualys.  In other iterations of the app, we even have it keeping scanner status, and other various data sources from Qualys. 
+This module was originially developed for for syncing "raw", or what Qualys refers to as 'manual' scan data/results for one or more Qualys accounts into the vulnDB system.  However, it grew beyond that and can store "Automatic Scan Reports" from Qualys.  In other iterations of the app, we even have it keeping scanner status, and other various data sources from Qualys. 
 
 Its main feature is that it utilizes the Qualys API to 'sync' scan data accross the multiple Qualys accounts back into the vulnDB relational database.  Extremely useful for when you want to catalog and correlate scan data across your multiple Qualys accounts. 
 
