@@ -26,7 +26,6 @@ foreach ( $accounts as $account )
     $api1 = new QualysAPI_v1;
     $api2 = new QualysAPI_v2($url2, $username, $password); 
 
-    
     Logger::msg("info", array("message" => "fetching report list", 'account' => $account_name, 'api_call' => 'report_template_list', 'api_version' => 1));
 
     $report_template_xml = $api1->report_template_list($url1, $username, $password);
@@ -56,6 +55,7 @@ foreach ( $accounts as $account )
     // Get the reports defined in config/vulndb.php
     $report_ids = $vdb_config['adr_reports'][$account_name];
 
+    // Go get 'em
     $adr_xml = ""; 
     foreach ( $report_ids as $report_id )
     {
