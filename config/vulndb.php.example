@@ -3,14 +3,54 @@
 return array (
     
         // Name of the account where you pull the Knowledgebase from
-        'kb_account' => '',
+        'kb_account' => 'CHANGE_ME',
 
         // Timeframe for vulnDB to 'sync' scans back 
         // For time examples, please look at the strtotime function
         // http://php.net/strtotime
-        'scan_timeframe' => '-2 month',
+        'scan_timeframe' => '-6 month',
 
         // Scan types to pull into vulnDB
         // Typically you want canceled and finished
         'scan_types_to_get' => array('Finished', 'Canceled'),
+
+        /** 
+        *   Asset data reports you wish to download by id
+        *
+        *   example if we want to pull in report ids 123455 and 54231 for our account named 'default', and report ids 444333, and 22212 for the 'APAC' account:
+        *
+        *       'adr_reports'   => array
+        *       (
+        *                   'default' => array 
+        *                   (
+        *                       '123455',
+        *                       '54321',
+        *                   ),
+        *                   'APAC'  => array
+        *                   (
+        *                       '444333',
+        *                       '22212',
+        *                   ),
+        *       );
+        *                                           
+        **/
+        'adr_reports'   => array 
+        (
+                'ACCOUNT1' => array
+                (
+                        '1103127',
+                        '11612360',
+                        '1112397',
+                ),
+                'ACCOUNT2'   =>  array
+                (
+                        '112116',
+                        '117231773',
+                        '1155225',
+                ),
+                'ACCOUNT3'  => array
+                (
+                        '11237022'
+                ),
+        ),
     );
