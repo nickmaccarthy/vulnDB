@@ -95,12 +95,17 @@ class QualysAPI_v2{
     * @return string
     *
     */
-    public function pollscans($sincedate)
+    public function pollscans($sincedate, $postdata = NULL)
     {
 
             $url = $this->base_url . "scan/";
 
-            $postdata = array( 'action' => 'list', 'show_ags' => '1', 'show_op' => 1, 'show_status' => 1, 'launched_after_datetime' => $sincedate );
+            // Our default options, additional options can be added by passing an array through the $postdata variable
+            $postdata['action'] = 'list';
+            $postdata['show_ags'] = '1';
+            $postdate['show_op'] = '1';
+            $postdata['launched_after_datetime'] = $sincedate;
+
 
             $output = $this->post_url($url, $postdata, $this->headers);
 

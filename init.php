@@ -91,6 +91,10 @@ define("ADR_VULNS_TABLE", $db_tables['vulndb']['adr_vulns']);
 define("ADR_AG_TABLE", $db_tables['vulndb']['adr_asset_groups']);
 define("REPORT_TEMPLATE_TABLE", $db_tables['vulndb']['report_templates']);
 
+// Scan Schedules
+define("SCAN_SCHEDULES_TABLE", $db_tables['vulndb']['scan_schedules']);
+define("SCANS_RUNNING_TABLE", $db_tables['vulndb']['running_scans']);
+
 // Logins
 define("LOGINS_TABLE", $db_tables['vulndb_users']['logins']);
 

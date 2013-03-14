@@ -176,12 +176,35 @@ class Model_vulndb_insert extends Model {
 
     }
 
+    public function scheduled_scans($xml, $account_name)
+    {
+
+        $parsed = parse::scan_schedules($xml, $account_name);
+
+        $insert = $this->insert(SCAN_SCHEDULES_TABLE, $parsed);
+
+        return $insert;
+
+    }
+
+    public function running_scans($xml_v1, $xml_v2, $account_name)
+    {
+
+        $now = date('c');
+
+        $parsed = parse::running_scans($xml_v1, $xml_v2, $account_name, $now);
+
+        $insert = $this->insert(SCANS_RUNNING_TABLE, $parsed);
+
+        return $insert;
+
+    }
 
     public function insert($table, $data)
     {
 
-        $fields = array_keys($data[0]);
-
+        $fields = array_keys(reset($data));
+       
         $insert = DB::insert($table, $fields);
 
         $c = 0;
@@ -189,6 +212,7 @@ class Model_vulndb_insert extends Model {
         {
 
             $c++;
+
             $insert->values($d);
 
             if ( $c % 500 === 0 )

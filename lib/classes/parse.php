@@ -419,4 +419,121 @@ class Parse {
 
     }
 
+    public static function scan_schedules($scan_schedules, $account)
+    {
+
+        $now = date('c');
+
+        // Load the XML into SimpleXML
+        try {
+            $xml = new SimpleXMLElement($scan_schedules);
+        } catch (Exception $e) {
+            echo "Error loading XML: " . $e->getMessage() . "\n";
+        }
+
+        foreach ( $xml->SCAN as $scan)
+        {
+            // Build an associative array from our XML for the query later...
+            $scans[] = array (
+
+                            "ACTIVE"            =>  (string) $scan['active'],
+                            "REF"               =>  (string) $scan['ref'],
+                            "TITLE"             =>  (string) $scan->TITLE,
+                            "TARGETS"           =>  (string) $scan->TARGETS,
+                            "START_DATE_UTC"    =>  (string)  $scan->SCHEDULE->START_DATE_UTC,
+                            "START_HOUR"        =>  (int) $scan->SCHEDULE->START_HOUR,
+                            "START_MINUTE"      =>  (int) $scan->SCHEDULE->START_MINUTE,
+                            "END_AFTER_HOURS"   =>  (int) $scan->SCHEDULE->END_AFTER_HOURS,
+                            "TIME_ZONE_CODE"    =>  (string) $scan->SCHEDULE->TIME_ZONE->TIME_ZONE_CODE,
+                            "TIME_ZONE_DETAILS" =>  (string) $scan->SCHEDULE->TIME_ZONE->TIME_ZONE_DETAILS,
+                            "DST_SELECTED"      =>  (int) $scan->SCHEDULE->DST_SELECTED,
+                            "RECURRENCE"        =>  (int) $scan->SCHEDULE->RECURRENCE,
+                            "DEFAULT_SCANNER"   =>  (string) $scan->DEFAULT_SCANNER,
+                            "NEXTLAUNCH_UTC"    =>  (string) $scan->NEXTLAUNCH_UTC,
+                            "ISCANNER_NAME"     =>  (string) $scan->ISCANNER_NAME,
+                            "OPTION"            =>  (string) $scan->OPTION,
+                            "TYPE"              =>  (string) $scan->TYPE,
+                            "OPTION_PROFILE"    =>  (string) $scan->OPTION_PROFILE->OPTION_PROFILE_TITLE,
+                            "LAST_UPDATED"      =>  (string) $now,
+                            "ACCOUNT"           =>  (string) $account
+                        );
+
+        }
+
+
+        return $scans;
+    }
+
+
+    public static function running_scans( $scanlist_v1, $scanlist_v2, $account, $now)
+    {
+
+
+        $xml = new SimpleXMLElement($scanlist_v2);
+        $xml_v1 = new SimpleXMLElement($scanlist_v1);
+
+
+        if ( ! $xml->RESPONSE->SCAN_LIST->SCAN)
+        {
+            $no_scan_msg = "NO_SCANS_RUNNING";
+
+             $scan_details[0] = array( "TYPE" => $no_scan_msg, "TITLE" => $no_scan_msg, "STATUS" => $no_scan_msg, "ACCOUNT" => $account, "DATE_ENTERED" => $now );
+             
+             return $scan_details;
+        }
+
+        foreach ( $xml->RESPONSE->SCAN_LIST->SCAN as $scan)
+        {
+
+            $ags = array();
+            $asset_groups = "";
+            if ( $scan->ASSET_GROUP_TITLE_LIST)
+            {
+                foreach ($scan->ASSET_GROUP_TITLE_LIST->ASSET_GROUP_TITLE as $ag)
+                {
+                    $ags[] = $ag;
+                }
+
+                $asset_groups = implode(',', $ags);
+            }
+
+            $ref = (string) trim($scan->REF);
+
+            $scan_details[$ref] = array(
+                                    'SCAN_ID'           =>  (string) trim($scan->REF),
+                                    'TYPE'              =>  (string) trim($scan->TYPE),
+                                    'TITLE'             =>  (string) trim($scan->TITLE),
+                                    'USER_LOGIN'        =>  (string) trim($scan->USER_LOGIN),
+                                    'LAUNCH_DATETIME'   =>  (string) trim($scan->LAUNCH_DATETIME),
+                                    'STATUS'            =>  (string) trim($scan->STATUS->STATE),
+                                    'TARGET'            =>  (string) trim($scan->TARGET),
+                                    'ASSET_GROUPS'      =>  (string) trim($asset_groups),
+                                    'OPTION_PROFILE'    =>  (string) trim($scan->OPTION_PROFILE->TITLE),
+                                    'DEFAULT_FLAG'      =>  (string) trim($scan->OPTION_PROFILE->DEFAULT_FLAG),
+                                    'DATE_ENTERED'      =>  (string) $now,
+                                );
+
+        }
+
+        // Strips out the targets from the api v1 call so we can map them to the apiv2 results later
+        foreach ( $xml_v1 as $eS)
+        {
+            $ref = (string) $eS['value'];
+
+            $targets = (string) $eS->KEY[1];
+
+            $v1_arr[$ref] = array('targets' => $targets);
+        }
+
+        // map the results from the api1 scan list to the api2 scan list
+        foreach ( $scan_details as $scan_ref => $info )
+        {
+            foreach ( $v1_arr as $scan_id => $details)
+            {
+                if ( $scan_ref === $scan_id) $scan_details[$scan_id]['targets'] = $details['targets'];
+            }
+        }
+
+        return $scan_details;
+    }
 }
