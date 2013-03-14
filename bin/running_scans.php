@@ -18,6 +18,29 @@
 *
 *       2013
 *
+*   
+*       Description:
+*
+*       This script is used to find running scans on each subscription as defined in your 'vulndb_users' table
+*
+*       It uses both API 1 and API 2 due to a bug/limitation in API 2 currently where the 'TARGETS' field is truncated prematurely.  
+*       The TARGETS list is not truncated in the V1 call, but the V2 call has more info about the current running scan.  So I make both calls
+*       And combine the TARGETS from V1 into the V2 results in the pasre::running_scans() method, and then place the results in the DB, noting if there 
+*       are no scans running via the "NO_SCANS_RUNNING" text.
+*
+*
+*       Usage:
+*        
+*       This script is useful when run as a CRON job so the running scans can be populated into the 'running_scans' table. 
+*       This is useful for an organization that needs to know what scans are running without logging into Qualys.  The data
+*       from this table is used in the frontend for vulnDB so users can quickly see if a particular host or hostname is being 
+*       scanned without logging into Qualys. I run this script at half hour intervals via CRON, so when users on the front
+*       end check, they hit my DB table instead of the Qualys API.  This of course gives them a half hour delay, but you only get 
+*       300 API calls per day from Qualys and this particular script requires two API call each time it runs.
+*
+*
+*
+*
 **/
 if ( ! is_file( $init_file = realpath(dirname(__FILE__))."/../init.php"))
 {

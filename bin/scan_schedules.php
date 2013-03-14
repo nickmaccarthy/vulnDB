@@ -18,6 +18,15 @@
 *
 *       2013
 *
+*
+*   Description:
+*
+*       This script will get a list of upcoming scheduled scans and place them in the scheduled_scans table
+*
+*       It can be useful to run this script in a CRON job for say every hour so upcoming scans can be seen
+*
+*
+*
 **/
 if ( ! is_file( $init_file = realpath(dirname(__FILE__))."/../init.php"))
 {

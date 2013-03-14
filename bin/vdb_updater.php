@@ -18,6 +18,22 @@
 *
 *       2013
 *
+*
+*       Description:
+*
+*       This script is what does the main manual scan data updating for vulnDB.  It can pull in scan data for multiple accounts for a specified timeframe.
+*       If run daily, it will continually pull in new scans that have ran.  
+*
+*
+*       Usage:
+*   
+*       Define timeframe in config/vulndb.php. Note that you only get 300 API calls per day, and each scan download takes 1 API call.  So if you have alot
+*       of scans in a timeframe, you may run out of API calls for that period.  The time period can be changed at any time.  So if you started off with a 
+*       shorter timeframe, and changed it to a longer timeframe the next day, vulnDB will still pull in those older scans.  You can keep doing this until you
+*       have all the scans in for your particular timeframe.
+*
+*
+*
 **/
 if ( ! is_file( $init_file = realpath(dirname(__FILE__))."/../init.php"))
 {

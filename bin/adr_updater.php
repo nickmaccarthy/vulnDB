@@ -18,6 +18,22 @@
 *
 *       2013
 *
+*   
+*       Description:
+*
+*       This script will download and insert an asset data report for a given report template.  The report template ID needs to be defined
+*       in config/vulndb.php for the account and report template ID you wish to pull in.  Asset data report is the API call being used here, but it
+*       is essentialy a report template.  I find this extremely useful for reports we need to track and trend since Qualys doesnt do that very well. 
+*
+*       Usage:
+*
+*       Define your report template ID's in config/vulndb.php by Account for ones you wish to pull in.  Note, You can have multiple report templates per account.  
+*       Your actual report templates ( and corresponding report template ID ) are defined in the Qualys GUI.  Create your report template or choose and 
+*       exiting one and get the report tempalte ID from there.
+*
+*
+*
+*
 **/
 if ( ! is_file( $init_file = realpath(dirname(__FILE__))."/../init.php"))
 {

@@ -18,6 +18,18 @@
 *
 *       2013
 *
+*
+*       Description:
+*
+*       Script to update the Qualys Knowledge base
+*
+*       Usage:
+*   
+*       Define a 'kb_account' in config/vulndb.php for which you want to pull the KB for.  This account should have access to this API call
+*       and if it does not, the functionality can be added by your regional TAM or Qualys Support.
+*
+*
+*
 **/
 if ( ! is_file( $init_file = realpath(dirname(__FILE__))."/../init.php"))
 {
