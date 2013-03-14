@@ -16,3 +16,8 @@ reports/*
 
 ## Ignore tests
 tests/*
+
+
+## Ignore csv and xml files
+*.xml
+*.csv
