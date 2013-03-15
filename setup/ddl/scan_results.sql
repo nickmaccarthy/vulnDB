@@ -5,7 +5,7 @@ CREATE TABLE `scan_results` (
   `DNS` varchar(100) NOT NULL default '',
   `NETBIOS` varchar(100) NOT NULL default '',
   `QID` mediumint(3) NOT NULL default '0' COMMENT 'QualysID for the Vulnerability -- Join to qualys_kb table for more details on the vuln',
-  `RESULT` text COMMENT 'What Qualys found',
+  `RESULT` MEDIUMTEXT COMMENT 'What Qualys found',
   `PROTOCOL` varchar(10) default NULL,
   `PORT` int(2) default NULL,
   `SSL_ENABLED` varchar(10) default NULL,
