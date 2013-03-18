@@ -144,6 +144,11 @@ foreach ( $accounts as $account )
                 }
 
             }
+            elseif ( $scanstatus = 'RUNNING')
+            {
+                // We can't pull in running scans, nor do we want to put that entry into the db
+                continue;
+            }
             else
             {
                 Logger::msg('info', array('account' => $account_name, 'message' => 'scan status did not match $scantypestoget and will not be pulled in', 'scan_id' => $scanid, 'scan_title' => $scantitle, 'scan_status' => $scanstatus));
