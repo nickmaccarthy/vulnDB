@@ -157,7 +157,7 @@ class QualysAPI_v1{
         
             $url = $base_url . "ignore_vuln.php";
 
-            $output = $this->post_url($url, $username, $password, $opts)
+            $output = $this->post_url($url, $username, $password, $opts);
 
             return $output;
 
