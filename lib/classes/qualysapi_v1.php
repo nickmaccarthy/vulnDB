@@ -152,7 +152,7 @@ class QualysAPI_v1{
          *
          *
          **/
-        public function ignore_vuln($url, $username, $password, $opts)
+        public function ignore_vuln($base_url, $username, $password, $opts)
         {
         
             $url = $base_url . "ignore_vuln.php";
