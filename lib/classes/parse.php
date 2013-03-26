@@ -353,7 +353,21 @@ class Parse {
         $template_id = $opts['report_template_id'];
         $now = date('c');
 
+        if ( ! $adr_xml)
+            return false;
+
+        libxml_use_internal_errors(true);
+
         $xml = new SimpleXMLElement($adr_xml);
+
+        if ( $xml === false )
+        {
+            echo "Failed loading XML:\n";
+            foreach ( libxml_get_errors() as $error)
+            {
+                echo "\t".$error->message;
+            }
+        }
 
         $host_info = array();
         $vulns = array();
