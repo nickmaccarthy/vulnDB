@@ -71,7 +71,7 @@ class Database_PDO extends Database {
 
     }
 
-    public function query($type, $sql, $as_object = FALSE, array $params = NULL)
+    public function query($type, $sql,array $params = NULL)
     {
 
         // Make sure we are connected to the DB
@@ -89,18 +89,13 @@ class Database_PDO extends Database {
         if ( $type === Database::SELECT)
         {
 
-            if ( $as_object === FALSE)
-            {
-                $result->setFetchMode(PDO::FETCH_ASSOC);
-            }
-            elseif ( is_string($as_object))
-            {
-                $result->setFetchMode(PDO::FETCH_CLASS, $as_object, $params);
-            }
+            // Return back an assoc array of the results
+            $result->setFetchMode(PDO::FETCH_ASSOC);
         
             $result = $result->fetchAll();
                 
             return $result;
+
         }
         elseif( $type === Database::INSERT)
         {
