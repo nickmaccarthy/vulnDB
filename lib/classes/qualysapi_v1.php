@@ -143,6 +143,28 @@ class QualysAPI_v1{
         }
 
         /**
+         *  Set Vulnerabilities to Ignore on Hosts
+         *
+         *  @param string $url - base_url for qualys to connect to, i.e. qualysapi.qualys.com
+         *  @param string $username username for qualys account
+         *  @param strnig $password password for qualys account
+         *  @opts array $opts associative array of options from qualys api documentation to pass to api call, currently on page 174 of the api v1 documentation
+         *
+         *
+         **/
+        public function ignore_vuln($base_url, $username, $password, $opts)
+        {
+        
+            $url = $base_url . "ignore_vuln.php";
+
+            $output = $this->post_url($url, $username, $password, $opts);
+
+            return $output;
+
+        }
+
+
+        /**
          * Set the reqeust method to GET
          *
          * Default for this class is POST
