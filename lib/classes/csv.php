@@ -11,6 +11,8 @@ class CSV {
 
     // How many rows we quene up before we flush to the DB
     public $insert_threshold = 2000;
+    
+    protected $_output_file = '';
 
     public static function factory()
     {
@@ -98,11 +100,65 @@ class CSV {
         
     } 
 
+    /**
+     *
+     *  Writes an array to a CSV file
+     *  If you have an associative array, then this method will get the 'headers' from the first array element
+     *  Otherwise you can define your own headers in $headers
+     *
+     *  Usage:
+     *      CSV::factory()->set_out_file('/somwhere/out.csv')->write($data_array);
+     *
+     *  @param  array   $data   data to be written to the CSV
+     *  @param  array   $headers    headers to be written to CSV
+     *  @return bool
+     *
+     **/ 
+    public function write(array $data, array $headers = NULL)
+    {
+
+        $fp = fopen($this->_output_file, 'w+');
+
+        // Use the headers if defined, otherwise, get them from the first array element 
+        if ( count($headers) )
+        {
+            $headers = $headers;
+        }
+        else
+        {
+            $headers = array_keys($data[0]);
+
+        }
+
+        // Write the headers
+        fputcsv($fp, $headers);
+
+
+        // Now write the rest of the data
+        foreach ( $data as $row )
+        {
+            
+            fputcsv($fp, array_values($row));
+
+        }
+
+        fclose($fp);
+
+        return true;
+    }
+
     public function extract_headers()
     {
 
         $this->extract_headers = TRUE;
 
+        return $this;
+    }
+
+    public function set_output_file($file)
+    {
+        $this->_output_file = $file;
+        
         return $this;
     }
 
