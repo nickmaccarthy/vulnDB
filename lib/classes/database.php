@@ -98,7 +98,7 @@ abstract class Database {
     }
 
 
-    abstract public function query($type, $sql, $as_object = FALSE, array $params = NULL);
+    abstract public function query($type, $sql, array $params = NULL);
 
 
     public function quote($value)
