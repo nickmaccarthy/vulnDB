@@ -92,9 +92,12 @@ class Model_vulndb_main extends Model {
     public function is_xml($xml)
     {
 
-	    if( preg_match("/^<\?xml version=\".*?\" encoding=\".*?\" \?>/i", $xml));
-        
-        return TRUE;
+	    if( preg_match("/^<\?xml version=\".*?\" encoding=\".*?\" \?>/i", $xml))
+        {
+            return TRUE;
+        }
+
+        return FALSE;
 
     }
 
