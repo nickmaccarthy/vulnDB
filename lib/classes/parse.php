@@ -367,6 +367,8 @@ class Parse {
             {
                 echo "\t".$error->message;
             }
+
+            return false;
         }
 
         $host_info = array();
