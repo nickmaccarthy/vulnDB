@@ -195,7 +195,7 @@ class QualysAPI_v1{
 
                 // Timeouts
                 curl_setopt($ch, CURLOPT_TIMEOUT, 500);
-                curl_setopt($ch, CURLOPT_LOW_SPEED_TIME, 120);
+                curl_setopt($ch, CURLOPT_LOW_SPEED_TIME, 500);
                 curl_setopt($ch, CURLOPT_LOW_SPEED_LIMIT, 10);
 
 
