@@ -3,7 +3,7 @@
 
 class Logger {
 
-    public static $date_format = "Y-m-d h:i:s T";
+    public static $date_format = "Y-m-d H:i:s T";
 
     public static function msg($type, $msgs)
     {
