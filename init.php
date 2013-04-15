@@ -12,6 +12,8 @@ $log = "log";
 // Defines our "reports" path where will store scan report and the such
 $reports = "reports";
 
+// Define our "modules" path where our modules are stored
+$modules = "modules";
 
 /**
  * The default extension of resource files. If you change this, all resources
@@ -38,6 +40,9 @@ if ( ! is_dir($log) AND is_dir(DOCROOT.$log))
 if ( ! is_dir($reports) AND is_dir(DOCROOT.$reports))
     $reports = DOCROOT.$reports;
 
+// Set the module path to the docroot
+if ( ! is_dir($modules) AND is_dir(DOCROOT.$modules))
+    $modules = DOCROOT.$modules;
 
 /**
  * Set the PHP error reporting level. If you set this in php.ini, you remove this.
@@ -57,16 +62,24 @@ error_reporting(E_ALL | E_STRICT);
 
 define('LIBPATH', realpath($lib).DIRECTORY_SEPARATOR);
 define('CONFIGPATH', realpath($config).DIRECTORY_SEPARATOR);
+define('MODPATH', realpath($modules).DIRECTORY_SEPARATOR);
 define('LOGPATH', realpath($log).DIRECTORY_SEPARATOR);
 define('REPORTPATH', realpath($reports).DIRECTORY_SEPARATOR);
 
 
-
 // Load the main vulndb_core class
-require(LIBPATH . "classes/vulndb/core" . EXT);
+require(DOCROOT . "classes/vulndb/core" . EXT);
 
 // Set our auto loader
 spl_autoload_register(array('vulndb_core', 'auto_load'));
+
+
+
+/**
+ *  Enable modules.  Modules are referenced by a relative or absolute path
+ *  Define them in config/modules.php
+ */
+$modules = Config::load('modules');
 
 /**
  *
