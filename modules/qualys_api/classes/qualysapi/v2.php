@@ -113,6 +113,31 @@ class QualysAPI_v2{
 
     }
 
+    /**     Auth    Records     **/
+
+    /**
+     *
+     *  Make an Oracle Authentication request
+     *
+     *  See page 230 on Qualys API documentation for a full list of options
+     *
+     *  Ex $opts = array("action" => "create", "title" => "Default Oracle Auth", "username" => "oracle", "password" => "s33kr3t!")
+     *
+     *  $param  array   $opts   Associative array of options for the auth record - see page ~230 of Qualys API V2 Docs
+     *
+     */
+    public function auth_oracle($opts)
+    {
+
+
+            $url = $this->base_url . "auth/oracle/";
+
+            $output = $this->post_url($url, $opts, $this->headers);
+
+            return $output;
+
+    }
+    
     /**
     * This method will make the appropriate CURL call to make the API call to Qualys
     * @param string url - The URL for the API call

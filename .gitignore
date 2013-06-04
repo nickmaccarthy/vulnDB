@@ -11,6 +11,9 @@ log/*.log
 reports/*
 !reports/README.md
 
+## Ignore these directories
+bin/util/proprietary
+
 ## Ignore all .swp
 *.swp
 
