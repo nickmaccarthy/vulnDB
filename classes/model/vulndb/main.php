@@ -41,6 +41,72 @@ class Model_vulndb_main extends Model {
 
     }
 
+    public function update_account_password($account, $password)
+    {
+
+        $query = 'update ' . LOGINS_TABLE . " set password = :password where account = :account";
+
+        $results = DB::query(Database::UPDATE, $query)
+                        ->bind(':password', $password)
+                        ->bind(':account', $account);
+
+        $results = $results->execute('vulndb_users');
+
+
+        return $results;
+    }
+
+    public function update_account_name($account, $new_name)
+    {
+
+        $query = 'update ' . LOGINS_TABLE . " set account = :new_name where account = :account";
+
+        $results = DB::query(Database::UPDATE, $query)
+                        ->bind(':new_name', $new_name)
+                        ->bind(':account', $account);
+
+        $results = $results->execute('vulndb_users');
+
+
+        return $results;
+
+
+    }
+
+    public function update_account_username($account, $new_name)
+    {
+
+        $query = 'update ' . LOGINS_TABLE . " set username = :new_name where account = :account";
+
+        $results = DB::query(Database::UPDATE, $query)
+                        ->bind(':new_name', $new_name)
+                        ->bind(':account', $account);
+
+        $results = $results->execute('vulndb_users');
+
+
+        return $results;
+
+
+    }
+
+    public function update_account_url($account, $api_url)
+    {
+
+        $query = 'update ' . LOGINS_TABLE . " set api_url = :api_url where account = :account";
+
+        $results = DB::query(Database::UPDATE, $query)
+                        ->bind(':api_url', $api_url)
+                        ->bind(':account', $account);
+
+        $results = $results->execute('vulndb_users');
+
+
+        return $results;
+
+
+    }
+
     public function getscans($account)
     {
 
