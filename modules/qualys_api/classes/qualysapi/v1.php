@@ -14,6 +14,11 @@
 class QualysAPI_v1{
 
         protected $_request_method = 'POST';
+
+        /* Curl Timeout Settings */
+        public $CURLOPT_TIMEOUT = 1000;
+        public $CURLOPT_LOW_SPEED_TIME = 1000;
+        public $CURLOPT_LOW_SPEED_LIMIT = 10;
     
         /**
         * This method will download the Qualys Knowlege Base and return the raw XML back
@@ -194,9 +199,9 @@ class QualysAPI_v1{
                 curl_setopt($ch, CURLOPT_HEADER, FALSE);
 
                 // Timeouts
-                curl_setopt($ch, CURLOPT_TIMEOUT, 1000);
-                curl_setopt($ch, CURLOPT_LOW_SPEED_TIME, 500);
-                curl_setopt($ch, CURLOPT_LOW_SPEED_LIMIT, 10);
+                curl_setopt($ch, CURLOPT_TIMEOUT, $this->CURLOPT_TIMEOUT );
+                curl_setopt($ch, CURLOPT_LOW_SPEED_TIME, $this->CURLOPT_LOW_SPEED_TIME );
+                curl_setopt($ch, CURLOPT_LOW_SPEED_LIMIT, $this->CURLOPT_LOW_SPEED_LIMIT );
 
 
                 if ( $this->_request_method === "POST")
