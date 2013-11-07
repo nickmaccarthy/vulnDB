@@ -71,7 +71,7 @@ class Database_PDO extends Database {
 
     }
 
-    public function query($type, $sql,array $params = NULL)
+    public function query($type, $sql, array $params = NULL)
     {
 
         // Make sure we are connected to the DB

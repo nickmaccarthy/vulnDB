@@ -90,6 +90,24 @@ class Database_MySQL extends Database {
         return $status;
     }
 
+    public function truncate($type, $table)
+    {
+
+        if (($result = mysql_query("TRUNCATE TABLE $table", $this->_connection)) === FALSE)
+        {
+
+            throw new vulnDB_Exception('Unable to truncate table:  :error [ :table ]',
+                                        array(':error' => mysql_error($this->_connection), ':table' => $table),
+                                        mysql_errno($this->_connection));
+        }
+        else
+        {
+            return mysql_affected_rows($this->_connection);
+        }
+
+    }
+
+
     public function query($type, $sql, $as_object = FALSE, array $params = NULL)
     {
         // Make sure the database is connected

@@ -8,6 +8,7 @@ abstract class Database {
     const INSERT = 2;
     const UPDATE = 3;
     const DELETE = 4;
+    const TRUNCATE = 5;
 
     public static $default = 'vulndb';
 
@@ -96,9 +97,7 @@ abstract class Database {
         return TRUE;
     }
 
-
     abstract public function query($type, $sql, array $params = NULL);
-
 
     public function quote($value)
     {
