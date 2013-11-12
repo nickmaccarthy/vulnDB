@@ -168,7 +168,7 @@ foreach ( $accounts as $account )
     // If you want to keep a trail for the AG's, just comment this out
     $deleted_ags = DB::query(Database::DELETE, "DELETE FROM " . MAIN_AG_TABLE . " WHERE ACCOUNT=:account")
         ->bind(':account', $account_name)
-        ->execute()
+        ->execute();
 
     // Pull in the asset groups for the account
     Logger::msg('info', array('message' => 'downloading asset groups', 'api_call' => 'get_asset_groups', 'api_version' => 1));
