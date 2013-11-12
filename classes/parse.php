@@ -224,44 +224,47 @@ class Parse {
         foreach($xml->ASSET_GROUP as $AG)
         {
 
-            $ID = $AG->ID;
-            $TITLE = $AG->TITLE;
+            $ID = (int) $AG->ID;
+            $TITLE = (string) $AG->TITLE;
 
-            $BIZ_IMP_RANK = $AG->BUSINESS_IMPACT->RANK;
-            $BIZ_IMP_TITLE = $AG->BUSINESS_IMPACT->IMPACT_TITLE;
+            $BIZ_IMP_RANK = (string) $AG->BUSINESS_IMPACT->RANK;
+            $BIZ_IMP_TITLE = (string) $AG->BUSINESS_IMPACT->IMPACT_TITLE;
 
-            $LOCATION = $AG->LOCATION;
+            $LOCATION = (string) $AG->LOCATION;
 
-            $CVSS_ENVIRO_CDP = $AG->CVSS_ENVIRO_CDP;
-            $CVSS_ENVIRO_TD = $AG->CVSS_ENVIRO_TD;
-            $CVSS_ENVIRO_CR = $AG->CVSS_ENVIRO_CR;
-            $CVSS_ENVIRO_IR = $AG->CVSS_ENVIRO_IR;
-            $CVSS_ENVIRO_AR = $AG->CVSS_ENVIRO_AR;
+            $CVSS_ENVIRO_CDP = (string) $AG->CVSS_ENVIRO_CDP;
+            $CVSS_ENVIRO_TD = (string) $AG->CVSS_ENVIRO_TD;
+            $CVSS_ENVIRO_CR = (string) $AG->CVSS_ENVIRO_CR;
+            $CVSS_ENVIRO_IR = (string) $AG->CVSS_ENVIRO_IR;
+            $CVSS_ENVIRO_AR = (string) $AG->CVSS_ENVIRO_AR;
 
-            $LAST_UPDATE = $AG->LAST_UPDATE;
+            $LAST_UPDATE = (string) $AG->LAST_UPDATE;
 
             if(count($AG->ASSIGNED_USERS)){
                 foreach($AG->ASSIGNED_USERS->ASSIGNED_USER as $eU){
-                    $LOGIN = $eU->LOGIN;
-                    $FIRSTNAME = $eU->FIRSTNAME;
-                    $LASTNAME = $eU->LASTNAME;
-                    $ROLE = $eU->ROLE;
+                    $LOGIN = (string) $eU->LOGIN;
+                    $FIRSTNAME = (string) $eU->FIRSTNAME;
+                    $LASTNAME = (string) $eU->LASTNAME;
+                    $ROLE = (string) $eU->ROLE;
                 }
 
             }
 
             if(count($AG->SCANNER_APPLIANCES)){
-                $APPLIANCE_NAME = $AG->SCANNER_APPLIANCES->SCANNER_APPLIANCE->SCANNER_APPLIANCE_NAME;
-                $APPLIANCE_SN = $AG->SCANNER_APPLIANCES->SCANNER_APPLIANCE->SCANNER_APPLIANCE_SN;
+                $APPLIANCE_NAME = (string) $AG->SCANNER_APPLIANCES->SCANNER_APPLIANCE->SCANNER_APPLIANCE_NAME;
+                $APPLIANCE_SN = (string) $AG->SCANNER_APPLIANCES->SCANNER_APPLIANCE->SCANNER_APPLIANCE_SN;
             }
 
-            $COMMENTS = $AG->COMMENTS;
+            $COMMENTS = (string) $AG->COMMENTS;
 
             if ( $AG->SCANIPS )
             {
-
+                $IP_START = "";
+                $IP_END = "";
                 foreach ( $AG->SCANIPS->IP as $eip )
                 {
+
+                    $eip = (string) $eip;
 
                     if ( strpos($eip, "-"))
                     {
@@ -279,40 +282,42 @@ class Parse {
                         $IP_START = $vulndb->makelongip($eip);
                         $IP_END = $vulndb->makelongip($eip);
                     }
+
+                    $ags[] = array(
+
+                        'ACCOUNT' => $account,
+                        'ASSET_ID' => $ID,
+                        'TITLE' => $TITLE,
+                        'IP_START' => $IP_START,
+                        'IP_END' => $IP_END,
+                        'APPLIANCE_NAME' => $APPLIANCE_NAME,
+                        'SCANNER_SN' => $SCANNER_SN,
+                        'COMMENTS' => $COMMENTS,
+                        'BIZ_IMPACT_RANK' => $BIZ_IMP_RANK,
+                        'BIZ_IMPACT_TITLE' => $BIZ_IMP_TITLE,
+                        'LOCATION' => $LOCATION,
+                        'CVSS_ENVIRO_CDP' => $CVSS_ENVIRO_CDP,
+                        'CVSS_ENVIRO_TD' => $CVSS_ENVIRO_TD,
+                        'CVSS_ENVIRO_CR' => $CVSS_ENVIRO_CR,
+                        'CVSS_ENVIRO_IR' => $CVSS_ENVIRO_IR,
+                        'CVSS_ENVIRO_AR' => $CVSS_ENVIRO_AR,
+                        'LAST_UPDATE' => $LAST_UPDATE,
+                        'USER_LOGIN' => $USER_LOGIN,
+                        'FIRST_NAME' => $FIRST_NAME,
+                        'LAST_NAME' => $LAST_NAME,
+                        'ROLE' => $ROLE,
+                        'DATE_ENTERED' => $now,
+                    );
                     
                 }
 
+
             }
 
-            $ag[] = array(
-
-                'ACCOUNT' => $account,
-                'ASSET_ID' => $ID,
-                'TITLE' => $TITLE,
-                'IP_START' => $IP_START,
-                'IP_END' => $IP_END,
-                'APPLIANCE_NAME' => $APPLIANCE_NAME,
-                'SCANNER_SN' => $SCANNER_SN,
-                'COMMENTS' => $COMMENTS,
-                'BIZ_IMPACT_RANK' => $BIZ_IMP_RANK,
-                'BIZ_IMPACT_TITLE' => $BIZ_IMP_TITLE,
-                'LOCATION' => $LOCATION,
-                'CVSS_ENVIRO_CDP' => $CVSS_ENVIRO_CDP,
-                'CVSS_ENVIRO_TD' => $CVSS_ENVIRO_TD,
-                'CVSS_ENVIRO_CR' => $CVSS_ENVIRO_CR,
-                'CVSS_ENVIRO_IR' => $CVSS_ENVIRO_IR,
-                'CVSS_ENVIRO_AR' => $CVSS_ENVIRO_AR,
-                'LAST_UPDATE' => $LAST_UPDATE,
-                'USER_LOGIN' => $USER_LOGIN,
-                'FIRST_NAME' => $FIRST_NAME,
-                'LAST_NAME' => $LAST_NAME,
-                'ROLE' => $ROLE,
-                'DATE_ENTERED' => $now,
-            );
             
         }
 
-        return $ag;
+        return $ags;
     }
 
     public static function report_template($xml, $account)
