@@ -99,10 +99,10 @@ class Model_vulndb_insert extends Model {
         
     }
 
-    public function ags($ag, $account)
+    public function ags($ag_xml, $account)
     {
 
-        $ags_parsed = parse::ags($ag, $account);
+        $ags_parsed = parse::ags($ag_xml, $account);
 
         $fields = array_keys($ags_parsed[0]);
 
@@ -111,7 +111,6 @@ class Model_vulndb_insert extends Model {
         foreach ( $ags_parsed as $ag)
         {
             $insert->values($ag);
-
         }
 
         $insert->execute();
@@ -163,7 +162,6 @@ class Model_vulndb_insert extends Model {
     {
 
         $adr = parse::asset_data_report($adr_xml, $opts);
-
 
         // Lets put it all in the DB
         $insert_hosts = $this->insert(ADR_HOSTS_TABLE, $adr['hosts']);
