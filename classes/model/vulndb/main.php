@@ -30,7 +30,9 @@ class Model_vulndb_main extends Model {
             
             $return = array(
                         'username' => $result['username'],
-                        'password' => CryptAES::decrypt($result['password']),
+                        'password' => $result['password'],
+                        'password_decrypted' => CryptAES::decrypt($result['password']),
+                        'api_url' => $result['api_url'],
                         'url1'  => 'https://' . $result['api_url'] . "/msp/",
                         'url2'  => 'https://' . $result['api_url'] . "/api/2.0/fo/",
                     );
