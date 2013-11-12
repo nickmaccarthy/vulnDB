@@ -214,7 +214,7 @@ class Model_vulndb_insert extends Model {
             $insert->values($d);
 
             if ( $c % 500 === 0 )
-
+            {
                 $insert->execute();
                 $insert->reset_values();
             }
