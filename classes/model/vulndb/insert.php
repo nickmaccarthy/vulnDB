@@ -205,8 +205,6 @@ class Model_vulndb_insert extends Model {
        
         $insert = DB::insert($table, $fields);
 
-        $profiler = Profiler::factory();
-
         $c = 0;
         foreach ( $data as $d )
         {
@@ -216,8 +214,6 @@ class Model_vulndb_insert extends Model {
             $insert->values($d);
 
             if ( $c % 500 === 0 )
-            {
-                echo "Mem Usage: {$profiler->get_usage()}\n";
 
                 $insert->execute();
                 $insert->reset_values();
