@@ -102,19 +102,19 @@ class Model_vulndb_insert extends Model {
     public function ags($ag_xml, $account)
     {
 
-        $ags_parsed = parse::ags($ag_xml, $account);
-
-        $fields = array_keys($ags_parsed[0]);
-
-        $insert = DB::insert(MAIN_AG_TABLE, $fields);
-
-        foreach ( $ags_parsed as $ag)
+        if( defined('PROFILE'))
         {
-            $insert->values($ag);
+
+            $should_profile = TRUE;
+
+            $profiler = Profiler::factory();
         }
 
-        $insert->execute();
+    
+        $ags_parsed = parse::ags($ag_xml, $account);
 
+        $insert = $this->insert(MAIN_AG_TABLE, $ags_parsed);
+        
         return $insert;
 
     }
@@ -205,6 +205,8 @@ class Model_vulndb_insert extends Model {
        
         $insert = DB::insert($table, $fields);
 
+        $profiler = Profiler::factory();
+
         $c = 0;
         foreach ( $data as $d )
         {
@@ -215,6 +217,8 @@ class Model_vulndb_insert extends Model {
 
             if ( $c % 500 === 0 )
             {
+                echo "Mem Usage: {$profiler->get_usage()}\n";
+
                 $insert->execute();
                 $insert->reset_values();
             }
