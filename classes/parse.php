@@ -221,6 +221,8 @@ class Parse {
         $ROLE = '';
         $DATE_ENTERED = '';
 
+        $ags = array();
+
         foreach($xml->ASSET_GROUP as $AG)
         {
 
@@ -240,8 +242,10 @@ class Parse {
 
             $LAST_UPDATE = (string) $AG->LAST_UPDATE;
 
-            if(count($AG->ASSIGNED_USERS)){
-                foreach($AG->ASSIGNED_USERS->ASSIGNED_USER as $eU){
+            if( count( $AG->ASSIGNED_USERS ) )
+            {
+                foreach( $AG->ASSIGNED_USERS->ASSIGNED_USER as $eU )
+                {
                     $LOGIN = (string) $eU->LOGIN;
                     $FIRSTNAME = (string) $eU->FIRSTNAME;
                     $LASTNAME = (string) $eU->LASTNAME;
@@ -250,7 +254,8 @@ class Parse {
 
             }
 
-            if(count($AG->SCANNER_APPLIANCES)){
+            if( count( $AG->SCANNER_APPLIANCES ) )
+            {
                 $APPLIANCE_NAME = (string) $AG->SCANNER_APPLIANCES->SCANNER_APPLIANCE->SCANNER_APPLIANCE_NAME;
                 $APPLIANCE_SN = (string) $AG->SCANNER_APPLIANCES->SCANNER_APPLIANCE->SCANNER_APPLIANCE_SN;
             }
@@ -266,7 +271,7 @@ class Parse {
 
                     $eip = (string) $eip;
 
-                    if ( strpos($eip, "-"))
+                    if ( strpos( $eip, "-" ) )
                     {
                         $ip_parts = explode('-', $eip);
 
