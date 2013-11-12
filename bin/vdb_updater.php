@@ -75,7 +75,6 @@ foreach ( $accounts as $account )
 
     $scanlist_xml = $api2->pollscans($timeframe);
 
-
     $scanlist = parse::scanlist($scanlist_xml);
 
     $scans_in_vulndb = $vulndb->getscans($account_name);
@@ -164,6 +163,12 @@ foreach ( $accounts as $account )
     {
         Logger::msg('info', array('account' => $account_name, 'message' => "no scans found for this account.  moving onto the next one"));
     }
+
+    // Delete AGs for account so we always have a fresh copy
+    // If you want to keep a trail for the AG's, just comment this out
+    $deleted_ags = DB::query(Database::DELETE, "DELETE FROM " . MAIN_AG_TABLE . " WHERE ACCOUNT=:account")
+        ->bind(':account', $account_name)
+        ->execute()
 
     // Pull in the asset groups for the account
     Logger::msg('info', array('message' => 'downloading asset groups', 'api_call' => 'get_asset_groups', 'api_version' => 1));
