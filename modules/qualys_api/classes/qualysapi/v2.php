@@ -25,6 +25,13 @@
 class QualysAPI_v2{
 
 
+    protected $_request_method = 'POST';
+
+    /* Curl Timeout Settings */
+    public $CURLOPT_TIMEOUT = 10000;
+    public $CURLOPT_LOW_SPEED_TIME = 10000;
+    public $CURLOPT_LOW_SPEED_LIMIT = 10;
+
     /* __contstruct */
     /**
     * This method will take care of logging us into the qualys api v2.0, getting a session ID,  and keeping the session ID handy for other API calls used during the instance of the class.
@@ -39,16 +46,10 @@ class QualysAPI_v2{
 
             $this->base_url = $base_url;
             $this->username = $username;
+            $this->password = $password;
 
-            $this->cookie_file = "/tmp/cookie_file" . rand();
             
             $this->headers = array("Content-type: application/x-www-form-urlencoded", "X-Requested-With: vulnDB");
-                            
-            // On construct(), login automagiclly
-            $url = $base_url . "session/";
-            $postdata = array( 'echo_request' => 1, 'action' => 'login', 'username' => $username, 'password' => $password);
-
-            $output = $this->post_url($url, $postdata, $this->headers);
             
     } 
 
@@ -113,6 +114,33 @@ class QualysAPI_v2{
 
     }
 
+    /**
+     *
+     *  Knowledgebase method
+     *
+     *
+     *  For informaton on parameters, see the qualys api v2 doucumentation around page 56
+     *
+     *
+     */
+    public function knowledgebase($action = 'list', $details = 'All', $addl_params = NULL)
+    {
+
+            $url = $this->base_url . "knowledge_base/vuln/";
+
+            $postdata['action'] = $action;
+            $postdata['details'] = $details;
+            
+            if ( ! is_null($addl_params))
+            {
+                $postdata .= $addl_params;
+            }
+            
+            $output = $this->post_url($url, $postdata, $this->headers);
+
+            return $output;
+    }
+
     /**     Auth    Records     **/
 
     /**
@@ -147,6 +175,91 @@ class QualysAPI_v2{
     * @returns string $result - This will be the result from the HTTP request
     */
     public function post_url($url, $post_array, $header_array, $options = NULL)
+    {
+
+            $post_string = http_build_query($post_array);
+
+            $ch = curl_init($url);
+
+            // Timeouts
+            curl_setopt($ch, CURLOPT_TIMEOUT, $this->CURLOPT_TIMEOUT );
+            curl_setopt($ch, CURLOPT_LOW_SPEED_TIME, $this->CURLOPT_LOW_SPEED_TIME );
+            curl_setopt($ch, CURLOPT_LOW_SPEED_LIMIT, $this->CURLOPT_LOW_SPEED_LIMIT );
+
+            // Don't return the header
+            curl_setopt($ch, CURLOPT_HEADER, FALSE);
+
+            if($post_array){
+                curl_setopt($ch, CURLOPT_POST, 1);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $post_string);
+            }
+
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $header_array);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+
+            // Autentication
+            curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+            curl_setopt($ch, CURLOPT_USERPWD, "$this->username:$this->password");
+
+            if ( isset($options['return_stream']))
+            {
+
+                if ( isset( $options['return_file']))
+                {
+
+                    if ( ! isset($options['output_filename']))
+                    {
+                        throw new Exception("Output_filename must be set, and must be a full path");
+                    }
+
+                    $fp = fopen($options['output_filename'], 'w+');
+                }
+                else
+                {
+                    $fp = fopen('qapi://memory', 'r+');
+                }
+
+                curl_setopt($ch, CURLOPT_FILE, $fp);
+
+                $curl_result = curl_exec($ch);
+
+                fclose($fp);
+            }
+            else
+            {
+                $curl_result = curl_exec($ch);
+            }
+
+            
+            $raw_headers = substr($curl_result, 0, strpos($curl_result, "\r\n\r\n"));
+            $body =  substr($curl_result, strpos($curl_result, "\r\n\r\n")) ;
+
+            $result = $body; 
+
+            $raw_header_array = explode("\r\n", $raw_headers);
+            $http_code = array_shift($raw_header_array);
+
+            foreach($raw_header_array as $header_line){
+                $key = strtoupper(trim(substr($header_line, 0, strpos($header_line, ":"))));
+                $val = trim(substr($header_line, strpos($header_line, ":")+1));
+
+                $headers[$key] = $val;
+            }
+
+            // Log our curl stats for this run
+            Logger::msg("info", array_merge( array("message" => "curl_stats"), curl_getinfo($ch)) );
+
+            // Close the curl connection
+            curl_close($ch);
+
+            return $result;
+
+    } 
+
+    /** Deprecated on 2014-01-03 --- can be removed after testing **/
+    public function post_url_old($url, $post_array, $header_array, $options = NULL)
     {
 
             $post_string = http_build_query($post_array);
@@ -256,8 +369,8 @@ class QualysAPI_v2{
         public function __destruct()
         {
 
-                // On destruct(), logout automagically
                 $url = $this->base_url . "session/";
+
                 $postdata = array( 'action' => 'logout' );
                 
                 $output = $this->post_url($url, $postdata, $this->headers);
