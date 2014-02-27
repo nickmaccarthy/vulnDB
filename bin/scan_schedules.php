@@ -43,6 +43,9 @@ $vdb_config = Config::load('vulndb');
 
 $accounts = $vulndb->getaccounts();
 
+DB::query(Database::DELETE, "TRUNCATE ". SCAN_SCHEDULES_TABLE)->execute();
+
+
 foreach ( $accounts as $account )
 {
 
@@ -64,6 +67,4 @@ foreach ( $accounts as $account )
     $upcoming = $api1->scheduled_scans($url1, $username, $password, array( "active" => "yes", "type" => "scan" ));
 
     $insert = $insert_model->scheduled_scans($upcoming, $account_name);
-
-
 }
