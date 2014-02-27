@@ -1,4 +1,5 @@
 <?php 
+
 /**
 *
 *
@@ -37,6 +38,8 @@ if ( ! is_file( $init_file = realpath(dirname(__FILE__))."/../init.php"))
     exit(1);
 }
 
+ini_set('memory_limit', '512M');
+
 require $init_file;
 
 Logger::msg("info", array('message' => "KB updater starting"));
@@ -53,13 +56,13 @@ $insert = Model::factory('vulndb_insert');
 $account_info = $vulndb->getaccountinfo($kb_account);
 
 $username = $account_info['username'];
-$password = $account_info['password'];
+$password = CryptAES::decrypt($account_info['password']);
 
 $url1 = $account_info['url1'];
 
 $api1 = new QualysAPI_v1;
 
-Logger::msg('info', array('message' => "Qualys KB download beginning", 'api_call' => 'get_qualys_kb', 'api_version' => '1'));
+Logger::msg('info', array('message' => "Qualys KB download beginning", 'api_call' => 'get_qualys_kb', 'api_version' => '1', 'kb_account' => $kb_account, 'account_username' => $username));
 
 $KB_XML = $api1->get_qualys_kb($url1, $username, $password);
 
@@ -77,7 +80,7 @@ if ( ! $vulndb->is_xml($KB_XML) )
 $truncate = DB::query(Database::DELETE, "TRUNCATE " . MAIN_QUALYS_KB_TABLE)
                 ->execute();
 
-Logger::msg("info", array('message' => "Qualsy KB table, ". MAIN_QUALYS_KB_TABLE . " truncated"));
+Logger::msg("info", array('message' => "Qualys KB table, ". MAIN_QUALYS_KB_TABLE . " truncated"));
 
 Logger::msg("info", array('message' => "KB insert beginning"));
 
