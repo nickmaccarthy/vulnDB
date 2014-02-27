@@ -67,8 +67,6 @@ foreach ( $accounts as $account )
     $url2 = 'https://' . $account['api_url'] . '/api/2.0/fo/';
 
     $api1 = new QualysAPI_v1;
-    $api2 = new QualysAPI_v2($url2, $username, $password); 
-
 
     Logger::msg("info", array("message" => "fetching report list", 'account' => $account_name, 'api_call' => 'report_template_list', 'api_version' => 1));
 
