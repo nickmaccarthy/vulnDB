@@ -16,9 +16,9 @@ class QualysAPI_v1{
         protected $_request_method = 'POST';
 
         /* Curl Timeout Settings */
-        public $CURLOPT_TIMEOUT = 1000;
-        public $CURLOPT_LOW_SPEED_TIME = 1000;
-        public $CURLOPT_LOW_SPEED_LIMIT = 10;
+        public $CURLOPT_TIMEOUT = 10000;
+        public $CURLOPT_LOW_SPEED_TIME = 10000;
+        public $CURLOPT_LOW_SPEED_LIMIT = 10000;
     
         /**
         * This method will download the Qualys Knowlege Base and return the raw XML back
@@ -67,6 +67,20 @@ class QualysAPI_v1{
             return $output;
 
         }
+
+        public function scan_report_list($base_url, $username, $password, $vars)
+        {
+
+            $url = $base_url . "scan_report_list.php";
+
+            $post_vars = $vars;
+
+            $output = $this->post_url($url, $username, $password, $post_vars);
+
+            return $output;
+
+        }
+
         public function asset_group($base_url, $username, $password, $arr)
         {
 
@@ -132,7 +146,8 @@ class QualysAPI_v1{
         {
             $url = $base_url . "report_template_list.php";
 
-            $output = $this->post_url($url, $username, $password);
+            //$output = $this->post_url($url, $username, $password);
+            $output = $this->get_url($url, $username, $password);
 
             return $output;
         }
@@ -193,12 +208,12 @@ class QualysAPI_v1{
                     $post_string = http_build_query($post_array);
                 }
 
-                $ch = curl_init($url);
+                $ch = curl_init();
 
-
-                curl_setopt($ch, CURLOPT_HEADER, FALSE);
+                curl_setopt($ch, CURLOPT_URL, $url);
 
                 // Timeouts
+                curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
                 curl_setopt($ch, CURLOPT_TIMEOUT, $this->CURLOPT_TIMEOUT );
                 curl_setopt($ch, CURLOPT_LOW_SPEED_TIME, $this->CURLOPT_LOW_SPEED_TIME );
                 curl_setopt($ch, CURLOPT_LOW_SPEED_LIMIT, $this->CURLOPT_LOW_SPEED_LIMIT );
@@ -206,7 +221,6 @@ class QualysAPI_v1{
 
                 if ( $this->_request_method === "POST")
                 {
-
                     curl_setopt($ch, CURLOPT_POST, 1);
                 }
 
@@ -215,9 +229,10 @@ class QualysAPI_v1{
                     curl_setopt($ch, CURLOPT_POSTFIELDS, $post_string);
                 }
 
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
                 curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
                 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+                //curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
 
                 curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
                 curl_setopt($ch, CURLOPT_USERPWD, "$username:$password");
@@ -226,31 +241,9 @@ class QualysAPI_v1{
 
                 // Log our curl stats for this run
                 Logger::msg("info", array_merge(array("message" => "curl_stats", "qualys_api_version" => "1"), curl_getinfo($ch)) );
-
                 curl_close($ch);
 
                 return $curl_result;
-
-
-                /*
-                $raw_headers = substr($curl_result, 0, strpos($curl_result, "\r\n\r\n"));
-                $body =  substr($curl_result, strpos($curl_result, "\r\n\r\n")) ;
-
-                $result = $body; 
-                $raw_header_array = explode("\r\n", $raw_headers);
-                $http_code = array_shift($raw_header_array);
-
-                foreach($raw_header_array as $header_line){
-                    $key = strtoupper(trim(substr($header_line, 0, strpos($header_line, ":"))));
-                    $val = trim(substr($header_line, strpos($header_line, ":")+1));
-
-                    $headers[$key] = $val;
-                }
-
-
-
-                return $result;
-                */
 
           }
 
