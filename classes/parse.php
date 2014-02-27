@@ -495,6 +495,11 @@ class Parse {
     {
 
 
+        if ( ! $xml_v1 || $xml ){
+            
+             return;
+        }
+
         $xml = new SimpleXMLElement($scanlist_v2);
         $xml_v1 = new SimpleXMLElement($scanlist_v1);
 
