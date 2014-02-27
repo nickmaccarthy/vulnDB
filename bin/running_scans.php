@@ -80,6 +80,9 @@ foreach ( $accounts as $account )
     $scanlist_v2 = $api2->pollscans(date('Y-m-d', strtotime('-15 day')), array('state' => 'Running'));
     $scanlist_v1 = $api1->scan_running_list($url1, $username, $password); 
 
+    // It appears Qualys isnt returning XML when there are no scans anymore :(
+    if ( ! $scanlist_v1 ) continue;
+
     $insert = $insert_model->running_scans($scanlist_v1, $scanlist_v2, $account_name);
     
     Logger::msg('info', array('message' => "running scans updated", 'account' => $account_name));
